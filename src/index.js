@@ -1,8 +1,8 @@
 const express = require('express')
 
 const chalk = require('chalk')
-const { createProxyMiddleware } = require('http-proxy-middleware')
 
+const cors = require('cors')
 
 const mongoose = require('./db/mongoose')
 
@@ -17,6 +17,10 @@ const port = process.env.PORT
 
 // Acquire an instance of Express
 const app = express()
+
+
+// Automatically allow incoming cors
+app.use(cors())
 
 
 // Automatically parse incoming reqests
