@@ -1,10 +1,12 @@
+require('./middleware/init')
+
+require('./db/mongoose')
+
 const express = require('express')
 
 const chalk = require('chalk')
 
 const cors = require('cors')
-
-const mongoose = require('./db/mongoose')
 
 const userRouter = require('./routers/user')
 
@@ -12,7 +14,11 @@ const locationRouter = require('./routers/location')
 
 const weatherRouter = require('./routers/weather')
 
+const delay = require('./middleware/delay')
+
 const port = process.env.PORT
+
+const isProduction = process.env.IS_PRODUCTION === 'true'
 
 
 // Acquire an instance of Express
@@ -21,6 +27,10 @@ const app = express()
 
 // Automatically allow incoming cors
 app.use(cors())
+
+
+// One second delay for local development
+if (!isProduction) { app.use(delay) }
 
 
 // Automatically parse incoming reqests
@@ -42,8 +52,8 @@ app.use(weatherRouter)
 // Listening Server
 app.listen(port, () => {
 
-  console.log(chalk.yellow('\n\nInitializing Server'));
+  console.log(chalk.hex('#009e00')(`Server started successfully on port ${port}`));
 
-  console.log(`Server starting on port ${port}`);
+  console.log(chalk.cyanBright(`Server time: ${new Date().toLocaleString()}`));
 
 })
